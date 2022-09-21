@@ -1,17 +1,14 @@
 import Link from "next/link";
-import Head from "next/head";
+import Layout from "../components/Layout";
 const AboutPage = () => {
   return (
-    <div>
+    <Layout title={"About DJ Events"}>
       <h1>About Page</h1>
       <p>This is an app to find the latest DJ and other musical events</p>
       <p>Version : 1.0.0</p>
-      <ul>
-        <li>
-          <Link href={"/"}>Go Back</Link>
-        </li>
-      </ul>
-    </div>
+
+      <Link href="/">Go Back</Link>
+    </Layout>
   );
 };
 
