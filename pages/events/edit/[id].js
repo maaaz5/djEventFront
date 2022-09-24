@@ -10,6 +10,7 @@ import moment from "moment/moment";
 import Modal from "@/components/Modal";
 import Image from "next/image";
 import { FaImage } from "react-icons/fa";
+import ImageUpload from "@/components/ImageUpload";
 
 export default function EditEventPage({ evt: { attributes, id } }) {
   const [values, setValues] = useState({
@@ -59,6 +60,16 @@ export default function EditEventPage({ evt: { attributes, id } }) {
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setValues({ ...values, [name]: value });
+  };
+
+  const imageUploaded = async () => {
+    const res = await fetch(`${API_URL}/api/events/${id}?populate=*`);
+    const data = await res.json();
+
+    setImagePreview(
+      data.data.attributes?.image?.data?.attributes?.formats?.thumbnail.url
+    );
+    setShowModal(false);
   };
   return (
     <Layout title={"Add New Event"}>
@@ -159,7 +170,7 @@ export default function EditEventPage({ evt: { attributes, id } }) {
       </div>
 
       <Modal show={showModal} onClose={() => setShowModal(false)}>
-        Image Upload
+        <ImageUpload evtId={id} imageUploaded={imageUploaded} />
       </Modal>
     </Layout>
   );
