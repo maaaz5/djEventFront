@@ -6,7 +6,6 @@ import Link from "next/link";
 import { API_URL } from "@/config/index";
 import styles from "@/styles/Form.module.css";
 import Layout from "@/components/Layout";
-import events from "pages/api/events";
 
 export default function AddEventPage() {
   const [values, setValues] = useState({

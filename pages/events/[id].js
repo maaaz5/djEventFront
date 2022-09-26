@@ -72,26 +72,27 @@ export default function EventPage({ evt: { attributes, id } }) {
     </Layout>
   );
 }
-export async function getStaticPaths() {
-  const res = await fetch(`${API_URL}/api/events`);
-  const events = await res.json();
+// export async function getStaticPaths() {
+//   const res = await fetch(`${API_URL}/api/events`);
+//   const events = await res.json();
 
-  const paths = events.data.map((ev) => ({
-    params: { id: ev.id.toString() },
-  }));
-  return {
-    paths,
-    fallback: true,
-  };
-}
+//   const paths = events.data.map((ev) => ({
+//     params: { id: ev.id.toString() },
+//   }));
+//   return {
+//     paths,
+//     fallback: true,
+//   };
+// }
 
-export async function getStaticProps({ params: { id } }) {
+export async function getServerSideProps({ params: { id }, req }) {
   const res = await fetch(`${API_URL}/api/events/${id}?populate=*`);
   const events = await res.json();
 
+  console.log(req.headers.cookie);
+
   return {
     props: { evt: events.data },
-    revalidate: 1,
   };
 }
 
