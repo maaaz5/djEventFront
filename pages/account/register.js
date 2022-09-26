@@ -5,6 +5,7 @@ import Link from "next/link";
 import Layout from "@/components/Layout";
 import styles from "@/styles/AuthForm.module.css";
 import { FaUser } from "react-icons/fa";
+import AuthContext from "@/context/AuthContext";
 
 export default function RegisterPage() {
   const [username, setUsername] = useState("");
@@ -12,13 +13,15 @@ export default function RegisterPage() {
   const [password, setPassword] = useState("");
   const [passwordConfirm, setPasswordConfirm] = useState("");
 
+  const { register, error } = useContext(AuthContext);
+
   const handleSubmit = (e) => {
     e.preventDefault();
     if (password !== passwordConfirm) {
       toast.error("Password do not match!");
       return;
     }
-    console.log(username, email, password, passwordConfirm);
+    register({ username, email, password });
   };
 
   return (
