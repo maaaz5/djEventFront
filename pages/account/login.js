@@ -11,17 +11,16 @@ export default function LoginPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  let { login, error } = useContext(AuthContext);
+  let { login, error, clearError } = useContext(AuthContext);
 
   useEffect(() => {
-    console.log(error);
     error && toast.error(error);
   }, [error]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
     login({ email, password });
-    error && toast.error(error);
+    clearError();
   };
 
   return (
