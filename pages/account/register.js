@@ -13,7 +13,10 @@ export default function RegisterPage() {
   const [password, setPassword] = useState("");
   const [passwordConfirm, setPasswordConfirm] = useState("");
 
-  const { register, error } = useContext(AuthContext);
+  const { register, error, clearError } = useContext(AuthContext);
+  useEffect(() => {
+    error && toast.error(error);
+  }, [error]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -22,6 +25,7 @@ export default function RegisterPage() {
       return;
     }
     register({ username, email, password });
+    clearError();
   };
 
   return (
