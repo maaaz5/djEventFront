@@ -11,8 +11,9 @@ import Modal from "@/components/Modal";
 import Image from "next/image";
 import { FaImage } from "react-icons/fa";
 import ImageUpload from "@/components/ImageUpload";
+import { parseCookies } from "@/helpers/index";
 
-export default function EditEventPage({ evt: { attributes, id } }) {
+export default function EditEventPage({ evt: { attributes, id }, token }) {
   const [values, setValues] = useState({
     name: attributes.name,
     performers: attributes.performers,
@@ -45,11 +46,16 @@ export default function EditEventPage({ evt: { attributes, id } }) {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
       },
       body: JSON.stringify({ data: values }),
     });
 
     if (!res.ok) {
+      if (res.status === 403 || res.status === 401) {
+        toast.error("No token included");
+        return;
+      }
       toast.error("Something Went Wrong");
     } else {
       const evt = await res.json();
@@ -170,13 +176,14 @@ export default function EditEventPage({ evt: { attributes, id } }) {
       </div>
 
       <Modal show={showModal} onClose={() => setShowModal(false)}>
-        <ImageUpload evtId={id} imageUploaded={imageUploaded} />
+        <ImageUpload evtId={id} imageUploaded={imageUploaded} token={token} />
       </Modal>
     </Layout>
   );
 }
 
-export async function getServerSideProps({ params: { id } }) {
+export async function getServerSideProps({ params: { id }, req }) {
+  const { token } = parseCookies(req);
   const res = await fetch(`${API_URL}/api/events/${id}?populate=*`);
 
   const data = await res.json();
@@ -185,6 +192,7 @@ export async function getServerSideProps({ params: { id } }) {
   return {
     props: {
       evt: data.data,
+      token,
     },
   };
 }
