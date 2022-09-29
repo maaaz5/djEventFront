@@ -5,7 +5,7 @@ import qs from "qs";
 import { useRouter } from "next/router";
 import Link from "next/link";
 
-export default function search({ events }) {
+export default function Search({ events }) {
   const router = useRouter();
 
   return (
